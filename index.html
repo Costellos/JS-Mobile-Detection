@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Test JS Mobile Detect</title>
+    </head>
+    <body>
+        <form class="device_info_form" method="post" action="test2.html"> 
+            <input type="hidden" name='os_name' class="deviceDetect" data-mdAction="osname" />
+            <input type="hidden" name='os_version' class="deviceDetect" data-mdAction="osversion" />
+            <input type="hidden" name='browser_name' class="deviceDetect" data-mdAction="browsername" />
+            <input type="hidden" name='browser_version' class="deviceDetect" data-mdAction="browserversion" />
+            <input type="submit" class="browser_submit" value="Submit">
+        </form>
+        
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="mobile_detect.js"></script>
+        <script type="text/Javascript">
+            jQuery('.deviceDetect').each(function(){
+                var action = jQuery(this).attr('data-mdAction');
+                var data = get_device_data(action);
+                jQuery(this).val(data);
+            });
+
+            jQuery('.device_info_form').on('submit', function(e){
+                e.preventDefault();
+                var x = jQuery(".device_info_form").serializeArray();
+                console.log(x);
+                jQuery.each(x, function(i, field) { 
+                    alert(field.name + ":" + field.value + " ");
+                });
+            });
+
+            function get_device_data(action){
+                var md = new MobileDetect(window.navigator.userAgent);
+                switch (action) {
+                    case 'devicetype':
+                        str = 'Fix';
+                        break;
+                    case 'browsername':
+                        var str = md.browser.name;
+                        break;
+                    case 'browserversion':
+                        var str = md.browser.version;
+                        break;
+                    case 'osname':
+                        var str = md.os.name;
+                        break;
+                    case 'osversion':
+                        var str = md.os.version;
+                        break;
+                    default:
+                        str = '';
+                        break;
+                }
+                if(str != ''){
+                    return str;
+                }else{
+                    return false;
+                }
+            }
+        </script>
+    </body>
+</html>
